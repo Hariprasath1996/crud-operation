@@ -22,6 +22,7 @@ const getAllUsers=async()=>{
   useEffect(() => {
     getAllUsers()
   }, [])
+
 // search and get value in this component
   const handleSearch =(e)=>{
 const searchText=e.target.value.toLowerCase()
@@ -29,6 +30,17 @@ const searchText=e.target.value.toLowerCase()
 const filterText = users.filter((user)=>user.name.toLowerCase().includes(searchText) || user.city.toLowerCase().includes(searchText))
 setFilterTextValue(filterText)
   }
+
+  // delete method ... 
+const handleDelete =async (id)=>{
+  await axios.delete(`http://localhost:8000/users/${id}`.then((res)=>{
+    setUsers(res.data)
+    setFilterTextValue(res.data)
+  }));
+  // after completion this method , create route method to server point to access this delete function
+};
+
+
 
   return (
     <>
@@ -60,7 +72,7 @@ setFilterTextValue(filterText)
       <td>{user.age}</td>
       <td>{user.city}</td>
       <td><button className='btn-edit green'>Edit</button></td>
-      <td><button className='btn-delete red'>Delete</button></td>
+      <td><button onClick={()=>handleDelete(user.id)} className='btn-delete red'>Delete</button></td>
     </tr>
     )
   })
