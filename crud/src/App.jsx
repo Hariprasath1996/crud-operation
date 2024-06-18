@@ -32,11 +32,11 @@ setFilterTextValue(filterText)
   }
 
   // delete method ... 
-const handleDelete =async (id)=>{
-  await axios.delete(`http://localhost:8000/users/${id}`.then((res)=>{
+const handleDelete = async(id)=>{
+  await axios.delete(`http://localhost:8000/users/${id}`).then((res)=>{
     setUsers(res.data)
     setFilterTextValue(res.data)
-  }));
+  });
   // after completion this method , create route method to server point to access this delete function
 };
 
