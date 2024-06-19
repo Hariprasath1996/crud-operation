@@ -7,9 +7,9 @@ import { useEffect, useState } from "react"
 function App() {
   const [users, setUsers] = useState([])
   const [filterTextValue, setFilterTextValue] = useState([])
-  const [isRecordOpen,setIsRecordOpen]=useState(false);
+  const [isRecordOpen, setIsRecordOpen] = useState(false);
   // this below state variable create for add or edit to pass to api , 
-  const [addData,setAddData]=useState([{name : "",age : "",city : ""}])
+  const [addUserData, setAddUserData] = useState([{ name: "", age: "", city: "" }])
 
   // get data from api to using axios method
   const getAllUsers = async () => {
@@ -25,7 +25,6 @@ function App() {
     getAllUsers()
 
   }, [])
-
   // search and get value in this component
   const handleSearch = (e) => {
     const searchText = e.target.value.toLowerCase()
@@ -48,11 +47,20 @@ function App() {
   }
 
   // Add or create  method 
-  
-const handleCreateRecord = ()=>{
+  const handleCreateUserRecord = () => {
+    setIsRecordOpen(true)
+    // below empty value is once add record data closed , old data will be cleared then start as new
+    setAddUserData({ name: "", age: "", city: "" })
+  }
 
+  // close record 
+  const closeModel = () => {
+    setIsRecordOpen(false)
+  }
+// search value get in input from addRecord
+const handleData =(e)=>{
+  setAddUserData({...addUserData,[e.target.name]:e.target.value}) 
 }
-
   return (
     <>
       <div className="container">
@@ -60,7 +68,7 @@ const handleCreateRecord = ()=>{
         <div className='input-container'>
           <label htmlFor="Search" >Title : </label>
           <input onChange={handleSearch} placeholder="search here..." type="Search" id='Search' className='Search' />
-          <button className='search-btn'>Add Record</button>
+          <button className='search-btn' onClick={handleCreateUserRecord}>Add Record</button>
         </div>
         <table className='table-head'>
           <thead >
@@ -82,7 +90,7 @@ const handleCreateRecord = ()=>{
                     <td>{user.name}</td>
                     <td>{user.age}</td>
                     <td>{user.city}</td>
-                    <td><button className='btn-edit green'onClick={handleCreateRecord}>Edit</button></td>
+                    <td><button className='btn-edit green'>Edit</button></td>
                     <td><button className='btn-delete red' onClick={() => handleDelete(user.id)}>Delete</button></td>
                   </tr>
                 )
@@ -90,6 +98,27 @@ const handleCreateRecord = ()=>{
             }
           </tbody>
         </table>
+        {isRecordOpen && (
+          <div className="Record-container">
+            <div className="record-header">
+              <span className="close" onClick={closeModel}>&times;</span>
+              <h2>Add Record </h2> 
+              <div className="input-data">
+                <label htmlFor="name">Full_Name </label>
+                <input onChange={handleData} value={addUserData.name} type="text" name="name" id="name" />
+              </div>
+              <div className="input-data">
+                <label htmlFor="age">Age </label>
+                <input onChange={handleData} value={addUserData.age} type="number" name="age" id="name" />
+              </div>
+              <div className="input-data">
+                <label htmlFor="city">City</label>
+                <input onChange={handleData} value={addUserData.city} type="text" name="city" id="name" />
+              </div>
+              <button className="add-user-details green">Add User Details</button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )
